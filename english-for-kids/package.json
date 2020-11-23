@@ -1,0 +1,38 @@
+{
+  "name": "english-for-kids",
+  "version": "1.0.0",
+  "description": "---",
+  "main": "index.js",
+  "dependencies": {
+    "strip-ansi": "^6.0.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "4.8.1",
+    "clean-webpack-plugin": "3.0.0",
+    "copy-webpack-plugin": "6.3.1",
+    "css-loader": "5.0.1",
+    "eslint": "7.12.1",
+    "eslint-config-airbnb-typescript": "12.0.0",
+    "eslint-plugin-import": "2.22.1",
+    "html-webpack-plugin": "4.5.0",
+    "node-sass": "5.0.0",
+    "sass-loader": "10.1.0",
+    "style-loader": "2.0.0",
+    "ts-loader": "8.0.11",
+    "typescript": "4.0.5",
+    "undefined": "0.1.0",
+    "url-loader": "4.1.1",
+    "webpack": "5.5.1",
+    "webpack-cli": "4.2.0",
+    "webpack-dev-server": "3.11.0"
+  },
+  "scripts": {
+    "eslint": "eslint src/**/*.ts",
+    "test": "npm run eslint",
+    "build": "webpack",
+    "start": "webpack serve --open chrome.exe"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

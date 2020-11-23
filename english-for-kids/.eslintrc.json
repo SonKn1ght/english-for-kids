@@ -1,0 +1,21 @@
+{
+  "env": {
+    "browser": true,
+    "es2020": true
+  },
+  "extends": [
+  "airbnb-typescript/base"
+  ],
+  "parserOptions": {
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "class-methods-use-this": "off",
+    "@typescript-eslint/quotes": [
+      "error",
+      "backtick"
+    ],
+    "import/no-cycle": "off"
+  }
+}
