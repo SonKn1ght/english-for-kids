@@ -70,7 +70,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.js', 'ts', '.scss', '.mp3'],
+    extensions: ['.ts', '.tsx', '.js', '.scss', '.mp3'],
   },
   plugins: [
     new CleanWebpackPlugin({ cleanStaleWebpackAssets: true }),

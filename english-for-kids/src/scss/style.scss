@@ -1,6 +1,10 @@
-@import './normalize';
-@import './font';
+// base
+@import 'base/normalize';
+@import 'base/font';
+@import 'base/mixin';
+@import 'base/variables';
+@import 'base/hamburger';
+@import 'base/btn';
 
-body {
-  background-color: green;
-}
+// components
+@import 'components/category';

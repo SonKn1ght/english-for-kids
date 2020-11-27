@@ -25,10 +25,9 @@ export default class Observer implements Subject {
     this.notify(`load`, 123);
   }
 
-  notify<T>(event: string, payload: T): void {
+  notify = <T>(event: string, payload: T): void => {
     this.observer.forEach((observer: SubsrFunnc) => {
       observer(event, payload);
     });
-    let a: T;
-  }
+  };
 }

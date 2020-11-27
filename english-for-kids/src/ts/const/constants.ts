@@ -1,11 +1,11 @@
-export enum UserAction {
+enum UserAction {
   SWAP_BONE = `SWAP_BONE`,
   NEW_GAME = `NEW_GAME`,
   SHOW_HOW_WIN = `SHOW_HOW_WIN`,
   SCORING_SWAP_BONE = `SCORING_SWAP_BONE`,
 }
 
-export enum UpdateType {
+enum UpdateType {
   MOVING = `MOVING`,
   RESTART = `RESTART`,
   MEASURING_TIME = `MEASURING_TIME`,
@@ -13,7 +13,13 @@ export enum UpdateType {
   SURRENDER = `SURRENDER`,
 }
 
-export enum RenderPosition {
+enum RenderPosition {
   AFTERBEGIN = `afterbegin`,
   BEFOREEND = `beforeend`,
 }
+
+export {
+  UserAction,
+  UpdateType,
+  RenderPosition,
+};

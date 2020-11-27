@@ -1,0 +1,40 @@
+.hamburger {
+  transition: 1s;
+
+  @include media-mobile {
+    z-index: 3;
+  }
+}
+
+.hamburger__line {
+  position: relative;
+  display: block;
+  width: 30px;
+  height: 2px;
+  background-color: $color-primary;
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: -10px;
+
+    width: 30px;
+    height: 2px;
+    background-color: $color-primary;
+  }
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 10px;
+
+    width: 30px;
+    height: 2px;
+    background-color: $color-primary;
+  }
+}
+
+.hamburger_rotate {
+  transform: rotate(90deg);
+}
+

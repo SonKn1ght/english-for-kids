@@ -1,0 +1,63 @@
+.button {
+  @include reset-link;
+  display: inline-block;
+
+  box-sizing: border-box;
+  padding: 1.5rem 4.5rem;
+
+  //@include font ($size: 1.7rem, $height: 2.2rem, $spacing: 0.06em);
+  color: $color-dark-3xl;
+  background-color: $color-primary;
+  border: none;
+  border-radius: 10rem;
+  outline: none;
+
+  &:hover {
+    background-color: $color-primary-light;
+    cursor: pointer;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &__secondary {
+    padding: 1.3rem 4.3rem;
+    border: 2px solid $color-primary;
+    background-color: $color-light-s;
+
+    &:hover {
+      border: 2px solid $color-light-s;
+    }
+  }
+}
+
+.button__navigation {
+  width: 5.2rem;
+  height: 5.2rem;
+
+  background-color: transparent;
+  border: 2px solid $color-primary;
+  border-radius: 10rem;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:hover {
+    cursor: pointer;
+    border: none;
+    background-color: $color-primary-light;
+  }
+
+  &_disable {
+    fill: $color-dark-s;
+    border: 2px solid $color-dark-s;
+    &:hover {
+      border: 2px solid $color-dark-s;
+      background: transparent;
+    }
+  }
+}
+
+

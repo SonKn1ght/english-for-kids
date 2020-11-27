@@ -1,0 +1,46 @@
+html {
+  @extend %font-prim;
+  font-size: 10px;
+}
+
+button {
+  padding: 0 0 0 0;
+}
+
+svg * {
+    fill: inherit;
+    stroke: inherit;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+//box-sizing по умолчанию через inherit
+* {
+  box-sizing: border-box;
+}
+html {
+  box-sizing: border-box;
+}
+
+.visually-hidden:not(:focus):not(:active),
+input[type="checkbox"].visually-hidden,
+ input[type="radio"].visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    border: 0;
+    padding: 0;
+    white-space: nowrap;
+    -webkit-clip-path: inset(100%);
+    clip-path: inset(100%);
+    clip: rect(0 0 0 0);
+    overflow: hidden;
+  }
+
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+  display: block;
+}
