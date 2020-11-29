@@ -1,8 +1,8 @@
-.category {
+.category-current {
   @include container;
 }
 
-.category__item {
+.category-current__item {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,7 +24,7 @@
   }
 }
 
-.category__image {
+.category-current__image {
   width: 80%;
   margin: 0 0 20px;
 }

@@ -13,7 +13,7 @@ const getTemplateCategory = (category: Array<string>): string => {
   }, ``);
 };
 
-export default class CategoriesView extends AbstractView {
+export class CategoriesView extends AbstractView {
   public callback: any = {};
 
   constructor(

@@ -1,5 +1,8 @@
 import Observer from './observer';
-import { TCardsCollections } from '../const/const-model/const-model';
+import {
+  TCardItem,
+  TCardsCollections,
+} from '../const';
 
 export default class CardsModel {
   public observerCards = new Observer();
@@ -9,8 +12,14 @@ export default class CardsModel {
     private cardsCategory: Array<string>,
   ) {}
 
-  public getCardsCollection() {
+  public getCardsAllCollection(): Array<TCardItem> {
     return this.cardsCollection;
+  }
+
+  public getCardsChosenCategory(type: string): Array<TCardItem> {
+    return this.cardsCollection.filter((currentCard) => {
+      return currentCard.category === type;
+    });
   }
 
   public getCardsCategory() {

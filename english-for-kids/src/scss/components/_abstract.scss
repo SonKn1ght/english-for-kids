@@ -1,0 +1,12 @@
+@mixin container {
+  width: 1280px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-column-gap: 40px;
+  grid-row-gap: 50px;
+
+  padding: 0 40px;
+  margin: 0 auto;
+  //background-color: gray;
+  margin-top: 100px;
+}
