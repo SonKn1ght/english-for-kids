@@ -35,7 +35,6 @@ export class CategoriesView extends AbstractView {
   };
 
   setCategoriesClickHandler(callback: (e: MouseEvent) => void): void {
-    console.log(this.getElement());
     this.callback.categoriesClick = callback;
     this.getElement().addEventListener(`click`, this.categoriesClickHandler, true);
   }

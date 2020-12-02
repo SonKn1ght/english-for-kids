@@ -5,7 +5,7 @@ import {
 } from '../const';
 
 export class CardsModel {
-  public observerCards = new Observer();
+  // public observerCards = new Observer();
 
   constructor(
     private cardsCollection: TCardsCollections,

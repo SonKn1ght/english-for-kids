@@ -25,6 +25,7 @@ export class MainPresenter {
   }
 
   public init() {
+    this.clearMainContainer();
     this.renderCategoriesView();
   }
 
@@ -39,15 +40,56 @@ export class MainPresenter {
     const currentCategory = this.cardsModel.getCardsChosenCategory(type);
     this.categoryItemComponent = new CategoryItemView(currentCategory);
     render(this.gameContainer, this.categoryItemComponent.getElement(), RenderPosition.BEFOREEND);
+    this.setHandlersCategoryItemComponent();
+  }
+
+  private clearMainContainer(): void {
+    if (this.categoriesComponent) remove(this.categoriesComponent);
+    if (this.categoryItemComponent) remove(this.categoryItemComponent);
   }
 
   private setHandlersCategoriesComponent() {
     this.categoriesComponent.setCategoriesClickHandler(this.handleCategoriesClick);
   }
 
-  handleCategoriesClick = (evt: MouseEvent) => {
-    // evt.preventDefault();
+  private setHandlersCategoryItemComponent() {
+    this.categoryItemComponent.setCardAudioClickHandler(this.handleCardAudioClick);
+    this.categoryItemComponent.setFlipButtonClickHandler(this.handleFlipButtonClick);
+  }
 
+  private handleCardAudioClick = (evt: MouseEvent): void => {
+    const targetClick = evt.target as HTMLElement;
+    const BUTTON_FLIP_CARD = `category__rotate-button`;
+
+    if (targetClick.className === BUTTON_FLIP_CARD) return;
+
+    const audioSrc = targetClick.closest(`a`);
+
+    if (audioSrc === null) return;
+
+    const audio = new Audio(`./assets/audio/${audioSrc.dataset.audio}`);
+    audio.play();
+  };
+
+  private handleFlipButtonClick = (evt: MouseEvent): void => {
+    const targetClick = evt.target as HTMLElement;
+
+    const FLIP_BUTTON = `category__rotate-button`;
+    if (targetClick.className !== FLIP_BUTTON) return;
+
+    const WRAPPER_CARD = `.category-current__wrapper-item`;
+    const wrapperCard: HTMLElement = targetClick.closest(WRAPPER_CARD);
+    wrapperCard.classList.toggle(`category-current_flip`);
+
+    const leaveCardCallback = (): void => {
+      wrapperCard.classList.toggle(`category-current_flip`);
+      wrapperCard.removeEventListener(`mouseleave`, leaveCardCallback);
+    };
+
+    wrapperCard.addEventListener(`mouseleave`, leaveCardCallback);
+  };
+
+  private handleCategoriesClick = (evt: MouseEvent): void => {
     const link = (evt.target as HTMLElement).closest(`a`);
     if (link === null) return;
     window.location.hash = link.hash;
@@ -57,7 +99,7 @@ export class MainPresenter {
 
   public switchRoute(route: string): void {
     if (this.cardsModel.getCardsCategory().includes(route)) {
-      if (this.categoriesComponent) remove(this.categoriesComponent);
+      this.clearMainContainer();
       this.renderCategoryItemView(route);
     }
   }

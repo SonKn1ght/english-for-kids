@@ -2,7 +2,43 @@
   @include container;
 }
 
-.category-current__item {
+.category-current__wrapper-item {
+  transform-style: preserve-3d;
+
+  .category-current__back-item {
+    transform: rotateY(180deg);
+    transform-style: preserve-3d;
+  }
+
+  .category-current__front-item {
+    transform: rotateY(0deg);
+    transform-style: preserve-3d;
+  }
+}
+
+.category-current_flip {
+  transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+
+  .category-current__back-item {
+    transform: rotateY(0deg);
+    transform-style: preserve-3d;
+  }
+
+  .category-current__front-item {
+    transform: rotateY(-180deg);
+    transform-style: preserve-3d;
+  }
+}
+
+
+.category-current__back-item {
+  transition: all 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+  backface-visibility: hidden;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,12 +51,30 @@
 
   border-radius: 10px;
   box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
-  transition: box-shadow 0.25s, transform 0.3s;
+}
+
+.category-current__front-item {
+  transition: all 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+  backface-visibility: hidden;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px 0;
+
+  @include reset-link;
+  font-size: 25px;
+  line-height: 30px;
+  color: black;
+
+  border-radius: 10px;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
 
   &:hover {
-    box-shadow: 0 8px 17px 0 rgba(0,0,0,0.15), 0 6px 20px 0 rgba(0,0,0,0.15);
-    transform: translateY(-7px);
-    cursor: pointer;
+    transition: all 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+    box-shadow: 3px 3px 20px 10px rgba(191, 191, 191, 1), -3px -3px 20px 10px rgba(191, 191, 191, 1);
+    cursor: pointer
   }
 }
 
@@ -28,3 +82,15 @@
   width: 80%;
   margin: 0 0 20px;
 }
+
+
+.category__rotate-button {
+  position: absolute;
+  bottom: 10px;
+  right: 30px;
+}
+
+.category__rotate-button:hover {
+  filter: brightness(0.5) contrast(175%);
+}
+
