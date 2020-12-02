@@ -12,7 +12,7 @@ import {
   CategoryItemView,
 } from '../view';
 
-export default class MainPresenter {
+export class MainPresenter {
   private categoriesComponent: CategoriesView;
 
   private categoryItemComponent: CategoryItemView;
@@ -26,13 +26,6 @@ export default class MainPresenter {
 
   public init() {
     this.renderCategoriesView();
-  }
-
-  public switchRoute(route: string): void {
-    if (this.cardsModel.getCardsCategory().includes(route)) {
-      remove(this.categoriesComponent);
-      this.renderCategoryItemView(route);
-    }
   }
 
   private renderCategoriesView() {
@@ -53,15 +46,21 @@ export default class MainPresenter {
   }
 
   handleCategoriesClick = (evt: MouseEvent) => {
-    evt.preventDefault();
-    const EXCLUSION_INDEX_GRID = 1;
-    const link = (evt.target as HTMLElement).closest(`a`);
+    // evt.preventDefault();
 
+    const link = (evt.target as HTMLElement).closest(`a`);
     if (link === null) return;
-    this.switchRoute(link.hash.slice(EXCLUSION_INDEX_GRID));
+    window.location.hash = link.hash;
 
     // this._handleViewAction(UserAction.NEW_GAME, UpdateType.RESTART, this._optionGame);
   };
+
+  public switchRoute(route: string): void {
+    if (this.cardsModel.getCardsCategory().includes(route)) {
+      if (this.categoriesComponent) remove(this.categoriesComponent);
+      this.renderCategoryItemView(route);
+    }
+  }
 
   // _handleViewAction(actionType, updateType, update) {
   //   switch (actionType) {

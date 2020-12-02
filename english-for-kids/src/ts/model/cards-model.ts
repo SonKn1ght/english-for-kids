@@ -4,7 +4,7 @@ import {
   TCardsCollections,
 } from '../const';
 
-export default class CardsModel {
+export class CardsModel {
   public observerCards = new Observer();
 
   constructor(

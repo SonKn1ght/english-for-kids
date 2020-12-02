@@ -68,6 +68,62 @@ export const cards: TCardsCollections = [
     audioSrc: `audio/animals/elephant.mp3`,
     category: `Animals`,
   },
+  {
+    word: `black`,
+    translation: `черный`,
+    image: `img/colors/black.svgz`,
+    audioSrc: `audio/colors/black.mp3`,
+    category: `Colors`,
+  },
+  {
+    word: `blue`,
+    translation: `синий`,
+    image: `img/colors/blue.svgz`,
+    audioSrc: `audio/colors/blue.mp3`,
+    category: `Colors`,
+  },
+  {
+    word: `emerald`,
+    translation: `изумрудный`,
+    image: `img/colors/emerald.svgz`,
+    audioSrc: `audio/colors/emerald.mp3`,
+    category: `Colors`,
+  },
+  {
+    word: `gray`,
+    translation: `серый`,
+    image: `img/colors/gray.svgz`,
+    audioSrc: `audio/colors/gray.mp3`,
+    category: `Colors`,
+  },
+  {
+    word: `pink`,
+    translation: `розовый`,
+    image: `img/colors/pink.svgz`,
+    audioSrc: `audio/colors/pink.mp3`,
+    category: `Colors`,
+  },
+  {
+    word: `red`,
+    translation: `красный`,
+    image: `img/colors/red.svgz`,
+    audioSrc: `audio/colors/red.mp3`,
+    category: `Colors`,
+  },
+  {
+    word: `violet`,
+    translation: `фиолетовый`,
+    image: `img/colors/violet.svgz`,
+    audioSrc: `audio/colors/violet.mp3`,
+    category: `Colors`,
+  },
+  {
+    word: `white`,
+    translation: `белый`,
+    image: `img/colors/white.svgz`,
+    audioSrc: `audio/colors/white.mp3`,
+    category: `Colors`,
+  },
 ];
 // export { cards, categoryCards, TCardsCollections, TCardItem };
 //

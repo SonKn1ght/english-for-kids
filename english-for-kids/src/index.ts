@@ -1,7 +1,8 @@
 import './scss/style.scss';
 
-import CardsModel from './ts/model/cards-model';
-import MainPresenter from './ts/presenter/main-presenter';
+import { CardsModel } from './ts/model/cards-model';
+import { MainPresenter } from './ts/presenter/main-presenter';
+import { Router} from "./ts/presenter/router";
 import {
   cards,
   categoryCards,
@@ -16,10 +17,8 @@ const bodyElement = document.querySelector(`body`);
 const cardsModel = new CardsModel(cards, categoryCards);
 
 const mainPresenter = new MainPresenter(bodyElement, cardsModel);
-mainPresenter.init();
 
-const newString: string = `Первый прогон!`;
-const twoString = `Второй прогон!`;
+const route = new Router(mainPresenter);
+route.init();
+// mainPresenter.init();
 
-console.log(newString);
-console.log(twoString);
