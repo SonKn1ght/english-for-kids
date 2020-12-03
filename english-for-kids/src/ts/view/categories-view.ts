@@ -1,13 +1,13 @@
 import AbstractView from './absctract-view';
 
 const getTemplateCategory = (category: Array<string>): string => {
-  return category.reduce((acc, curent) => {
-    acc += `<a href="#${curent}" class="category__item">
+  return category.reduce((acc, current) => {
+    acc += `<a href="#${current}" class="category__item">
               <img
-              src="/assets/img/category/${curent}.svgz"
-              alt="${curent}"
+              src="./assets/img/category/${current}.svgz"
+              alt="${current}"
               class="category__image">
-              ${curent}
+              ${current}
             </a>`;
     return acc;
   }, ``);
@@ -20,7 +20,6 @@ export class CategoriesView extends AbstractView {
     private category: Array<string>,
   ) {
     super();
-    // this.categoriesClickHandler = this.categoriesClickHandler.bind(this);
   }
 
   getTemplate(): string {

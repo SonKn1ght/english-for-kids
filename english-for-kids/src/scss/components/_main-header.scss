@@ -1,0 +1,17 @@
+.main-header {
+  width: 1280px;
+  padding: 0 40px;
+  margin: 40px auto;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.main-header__logo {
+  transition: transform 0.3s;
+  &:hover {
+    transform: translateY(-5px);
+    cursor: pointer;
+  }
+}

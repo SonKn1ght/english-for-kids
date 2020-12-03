@@ -9,7 +9,7 @@ const getTemplateItem = (category: Array<TCardItem>): string => {
                data-audio="${current.audioSrc}">
                 <img
                 class="category-current__image"
-                src="/assets/img/${current.image}"
+                src="./assets/img/${current.image}"
                 alt="${current.word}"
                 >
                 <span>${current.word}</span>

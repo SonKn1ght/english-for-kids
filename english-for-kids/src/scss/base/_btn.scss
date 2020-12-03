@@ -6,14 +6,14 @@
   padding: 1.5rem 4.5rem;
 
   //@include font ($size: 1.7rem, $height: 2.2rem, $spacing: 0.06em);
-  color: $color-dark-3xl;
-  background-color: $color-primary;
+  //color: $color-dark-3xl;
+  //background-color: $color-primary;
   border: none;
   border-radius: 10rem;
   outline: none;
 
   &:hover {
-    background-color: $color-primary-light;
+    //background-color: $color-primary-light;
     cursor: pointer;
   }
 
@@ -23,11 +23,11 @@
 
   &__secondary {
     padding: 1.3rem 4.3rem;
-    border: 2px solid $color-primary;
-    background-color: $color-light-s;
+    //border: 2px solid $color-primary;
+    //background-color: $color-light-s;
 
     &:hover {
-      border: 2px solid $color-light-s;
+      //border: 2px solid $color-light-s;
     }
   }
 }
@@ -37,7 +37,7 @@
   height: 5.2rem;
 
   background-color: transparent;
-  border: 2px solid $color-primary;
+  //border: 2px solid $color-primary;
   border-radius: 10rem;
 
   &:focus {

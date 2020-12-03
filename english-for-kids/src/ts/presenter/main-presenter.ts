@@ -10,12 +10,17 @@ import {
 import {
   CategoriesView,
   CategoryItemView,
+  ControlView,
 } from '../view';
 
 export class MainPresenter {
   private categoriesComponent: CategoriesView;
 
   private categoryItemComponent: CategoryItemView;
+
+  private controlComponent: ControlView;
+
+  private currentRoute: string = ``;
 
   constructor(
     private gameContainer: HTMLElement,
@@ -26,21 +31,28 @@ export class MainPresenter {
 
   public init() {
     this.clearMainContainer();
+    if (!this.controlComponent) this.renderControlView();
     this.renderCategoriesView();
   }
 
-  private renderCategoriesView() {
+  private renderCategoriesView(): void {
     const category = this.cardsModel.getCardsCategory();
     this.categoriesComponent = new CategoriesView(category);
     render(this.gameContainer, this.categoriesComponent.getElement(), RenderPosition.BEFOREEND);
     this.setHandlersCategoriesComponent();
   }
 
-  private renderCategoryItemView(type: string) {
+  private renderCategoryItemView(type: string): void {
     const currentCategory = this.cardsModel.getCardsChosenCategory(type);
     this.categoryItemComponent = new CategoryItemView(currentCategory);
     render(this.gameContainer, this.categoryItemComponent.getElement(), RenderPosition.BEFOREEND);
     this.setHandlersCategoryItemComponent();
+  }
+
+  private renderControlView(): void {
+    this.controlComponent = new ControlView(this.cardsModel.getCardsCategory(), this.currentRoute);
+    render(this.gameContainer, this.controlComponent.getElement(), RenderPosition.BEFOREEND);
+    this.controlComponent.setInnerHandlers();
   }
 
   private clearMainContainer(): void {
@@ -98,6 +110,10 @@ export class MainPresenter {
   };
 
   public switchRoute(route: string): void {
+    this.currentRoute = route;
+
+    if (!this.controlComponent) this.renderControlView();
+
     if (this.cardsModel.getCardsCategory().includes(route)) {
       this.clearMainContainer();
       this.renderCategoryItemView(route);

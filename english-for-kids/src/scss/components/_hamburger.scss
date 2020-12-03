@@ -1,0 +1,56 @@
+.hamburger {
+  transition: 0.5s;
+  display: flex;
+  align-items: center;
+  height: 22px;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:hover .hamburger__line {
+    background-color: black;
+
+    &:after {
+      background-color: black;
+    }
+
+    &:before {
+      background-color: black;
+    }
+  }
+}
+
+.hamburger__line {
+  position: relative;
+  display: block;
+  width: 30px;
+  height: 2px;
+  background-color: gray;
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: -10px;
+
+    width: 30px;
+    height: 2px;
+    background-color: gray;
+  }
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 10px;
+
+    width: 30px;
+    height: 2px;
+    background-color: gray;
+  }
+
+
+}
+
+.hamburger_rotate {
+  transform: rotate(90deg);
+}

@@ -1,0 +1,70 @@
+.menu {
+  box-sizing: border-box;
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  left: 0;
+  height: 100vh;
+
+  width: 0;
+  padding: 70px 0 0 0;
+  overflow: hidden;
+
+
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+
+  transition: all 0.3s ease-in;
+  background-image: linear-gradient(rgb(0, 153, 174), rgb(0, 191, 130));
+}
+
+.menu--active {
+  width: auto;
+  overflow: auto;
+  padding: 70px 400px 30px 70px;
+}
+
+.menu__close {
+  position: absolute;
+  right: 70px;
+
+  &:hover {
+    cursor: pointer;
+    path {
+      fill: black;
+    }
+  }
+}
+
+.menu__link {
+  width: 130px;
+  text-align: center;
+  display: block;
+  @include reset-link;
+  padding: 0 10px;
+  border-radius: 10px;
+
+  color: $main-text;
+  font-size: 26px;
+
+  background-repeat: repeat-y;
+  background-size: 0% 0;
+  background-position: 0 65%;
+  transition: 0.4s ease-out;
+
+  &:hover {
+      cursor: pointer;
+
+      color: #4e4528;
+      background-image: linear-gradient(#ffe082 0%, #ffe082 100%);
+      background-size: 100% 1em;
+      transition: 0.4s ease-out;
+  }
+}
+
+.menu__link-active {
+  white-space: nowrap;
+  color: #4e4528;
+  background-color: #ffe082;
+}
