@@ -24,7 +24,7 @@ const getTemplateItem = (category: Array<TCardItem>): string => {
               <div class="category-current__back-item">
                 <img
                 class="category-current__image"
-                src="/assets/img/${current.image}"
+                src="./assets/img/${current.image}"
                 alt="${current.word}"
                 >
                 <span>${current.translation}</span>

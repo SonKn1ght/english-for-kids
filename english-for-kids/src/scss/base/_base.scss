@@ -1,11 +1,13 @@
 html {
-  @extend %font-prim;
-  font-size: 10px;
+  //font-size: 10px;
 }
 
 body {
   overflow-x: hidden;
+  font-family: xplor;
+  font-weight: 500;
 }
+
 
 button {
   padding: 0 0 0 0;

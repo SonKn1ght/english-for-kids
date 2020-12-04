@@ -1,3 +1,6 @@
-body {
-  color: red;
+@font-face {
+  font-family: 'xplor';
+  src: url('/src/assets/fonts/xplor_bold-regular-webfont.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
 }

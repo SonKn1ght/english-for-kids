@@ -2,7 +2,7 @@ import './scss/style.scss';
 
 import { CardsModel } from './ts/model/cards-model';
 import { MainPresenter } from './ts/presenter/main-presenter';
-import { Router} from "./ts/presenter/router";
+import { Router } from "./ts/presenter/router";
 import {
   cards,
   categoryCards,
@@ -21,4 +21,3 @@ const mainPresenter = new MainPresenter(bodyElement, cardsModel);
 const route = new Router(mainPresenter);
 route.init();
 // mainPresenter.init();
-
