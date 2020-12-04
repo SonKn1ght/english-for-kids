@@ -23,6 +23,7 @@ export class ControlView extends AbstractView {
   constructor(
     private category: Array<string>,
     private activeMenuItem: string = ``,
+    private mode: string | undefined,
   ) {
     super();
   }
@@ -44,7 +45,9 @@ export class ControlView extends AbstractView {
                 <label>
                     <input
                       class="visually-hidden"
-                      type="checkbox" name="size" value="7">
+                      type="checkbox"
+                      ${this.mode ? `checked` : ``}
+                      >
                     <span class="toggle-indicator"></span>
                   </label>
               </div>
@@ -99,13 +102,12 @@ export class ControlView extends AbstractView {
     clickTarget.classList.add(MENU_LINK_ACTIVE);
   };
 
-  // categoriesClickHandler = (evt: MouseEvent): void => {
-  //   evt.preventDefault();
-  //   this.callback.categoriesClick(evt);
-  // };
-  //
-  // setCategoriesClickHandler(callback: (e: MouseEvent) => void): void {
-  //   this.callback.categoriesClick = callback;
-  //   this.getElement().addEventListener(`click`, this.categoriesClickHandler, true);
-  // }
+  modeClickHandler = (evt: MouseEvent): void => {
+    this.callback.modeClick(evt);
+  };
+
+  setModeClickHandler(callback: (e: MouseEvent) => void): void {
+    this.callback.modeClick = callback;
+    this.getElement().querySelector(`.toggle`).addEventListener(`change`, this.modeClickHandler);
+  }
 }

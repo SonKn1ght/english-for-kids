@@ -13,6 +13,8 @@ import {
   ControlView,
 } from '../view';
 
+const MODE_GAME = `game`;
+
 export class MainPresenter {
   private categoriesComponent: CategoriesView;
 
@@ -20,7 +22,13 @@ export class MainPresenter {
 
   private controlComponent: ControlView;
 
-  private currentRoute: string = ``;
+  private currentRoute: {
+    category: string | undefined,
+    mode: string | undefined,
+  } = {
+    category: ``,
+    mode: undefined,
+  };
 
   constructor(
     private gameContainer: HTMLElement,
@@ -29,7 +37,9 @@ export class MainPresenter {
     // this.cardsModel.addObserver(this._handleModelEvent);
   }
 
-  public init() {
+  public init(mode: string) {
+    this.currentRoute.mode = mode;
+
     this.clearMainContainer();
     if (!this.controlComponent) this.renderControlView();
     this.renderCategoriesView();
@@ -50,9 +60,14 @@ export class MainPresenter {
   }
 
   private renderControlView(): void {
-    this.controlComponent = new ControlView(this.cardsModel.getCardsCategory(), this.currentRoute);
+    this.controlComponent = new ControlView(
+      this.cardsModel.getCardsCategory(),
+      this.currentRoute.category,
+      this.currentRoute.mode,
+    );
     render(this.gameContainer, this.controlComponent.getElement(), RenderPosition.BEFOREEND);
     this.controlComponent.setInnerHandlers();
+    this.setHandlersControlComponent();
   }
 
   private clearMainContainer(): void {
@@ -67,6 +82,10 @@ export class MainPresenter {
   private setHandlersCategoryItemComponent() {
     this.categoryItemComponent.setCardAudioClickHandler(this.handleCardAudioClick);
     this.categoryItemComponent.setFlipButtonClickHandler(this.handleFlipButtonClick);
+  }
+
+  private setHandlersControlComponent() {
+    this.controlComponent.setModeClickHandler(this.handleModeClick);
   }
 
   private handleCardAudioClick = (evt: MouseEvent): void => {
@@ -109,14 +128,24 @@ export class MainPresenter {
     // this._handleViewAction(UserAction.NEW_GAME, UpdateType.RESTART, this._optionGame);
   };
 
+  private handleModeClick = (): void => {
+    const currentMode = window.location.hash.includes(MODE_GAME) ? `` : MODE_GAME;
+
+    if (currentMode) {
+      window.location.hash = `${window.location.hash.replace(`/`, ``)}/${currentMode}`;
+      return;
+    }
+    window.location.hash = window.location.hash.replace(`/${MODE_GAME}`, ``);
+  };
+
   public switchRoute(route: string): void {
-    this.currentRoute = route;
+    [this.currentRoute.category, this.currentRoute.mode] = route.split(`/`);
 
     if (!this.controlComponent) this.renderControlView();
 
-    if (this.cardsModel.getCardsCategory().includes(route)) {
+    if (this.cardsModel.getCardsCategory().includes(this.currentRoute.category)) {
       this.clearMainContainer();
-      this.renderCategoryItemView(route);
+      this.renderCategoryItemView(this.currentRoute.category);
     }
   }
 

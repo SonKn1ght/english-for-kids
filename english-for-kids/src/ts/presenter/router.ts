@@ -12,12 +12,14 @@ export class Router {
   }
 
   public handleHash = (): void => {
-    const name: string = this.getURL();
+    let route: string = this.getURL();
+    console.log(route)
 
-    if (name) {
-      this.presenter.switchRoute(name);
+    if (!route || route === `/game`) {
+      route = route.replace(`/`,``)
+      this.presenter.init(route);
     } else {
-      this.presenter.init();
+      this.presenter.switchRoute(route);
     }
   };
 
