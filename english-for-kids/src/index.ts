@@ -7,17 +7,13 @@ import {
   cards,
   categoryCards,
 } from './ts/const';
-import {
-  CategoriesView,
-  CategoryItemView,
-} from './ts/view';
 
 const bodyElement = document.querySelector(`body`);
 
 const cardsModel = new CardsModel(cards, categoryCards);
+cardsModel.checkStorage();
 
 const mainPresenter = new MainPresenter(bodyElement, cardsModel);
 
 const route = new Router(mainPresenter);
 route.init();
-// mainPresenter.init();

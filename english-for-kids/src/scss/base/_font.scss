@@ -1,6 +1,8 @@
 @font-face {
-  font-family: 'xplor';
-  src: url('/src/assets/fonts/XPLORBold.woff2') format('woff2');
+  font-family: 'Krabuler';
+  src: url('/src/assets/fonts/RFKrabuler-Regular.woff2') format('woff2'),
+  url('/src/assets/fonts/RFKrabuler-Regular.woff') format('woff');
   font-weight: 500;
   font-style: normal;
 }
+

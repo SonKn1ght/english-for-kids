@@ -19,7 +19,9 @@ const PAUSE_FOR_END_GAME: number = 500;
 
 const getTemplateItem = (category: Array<TCardItem>, mode: string): string => {
   return category.reduce((acc, current) => {
-    acc += `<div class="category-current__wrapper-item">
+    acc += `<div
+             class="category-current__wrapper-item"
+             data-word="${current.word}">
               <a
                class="category-current__front-item ${mode === MODE_GAME ? `category-current__item_active` : ``}"
                data-audio="${current.audioSrc}">

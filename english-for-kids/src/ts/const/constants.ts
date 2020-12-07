@@ -5,17 +5,17 @@ export enum UserAction {
   SCORING_SWAP_BONE = `SCORING_SWAP_BONE`,
 }
 
-export enum UpdateType {
-  MOVING = `MOVING`,
-  RESTART = `RESTART`,
-  MEASURING_TIME = `MEASURING_TIME`,
-  WIN = `WIN`,
-  SURRENDER = `SURRENDER`,
+export enum TypeUpdateStats {
+  CLICKS = `clicks`,
+  CORRECT = `correct`,
+  ERRORS = `errors`,
+  WRONG = `wrong`,
 }
 
 export enum RenderPosition {
   AFTERBEGIN = `afterbegin`,
   BEFOREEND = `beforeend`,
+  AFTER = `after`,
 }
 
 export const MODE_GAME = `game`;

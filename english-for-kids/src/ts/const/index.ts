@@ -3,10 +3,11 @@ export {
   categoryCards,
   TCardsCollections,
   TCardItem,
+  TCardItemStats,
 } from './const-model';
 
 export {
-  UpdateType,
+  TypeUpdateStats,
   UserAction,
   RenderPosition,
   MODE_GAME,

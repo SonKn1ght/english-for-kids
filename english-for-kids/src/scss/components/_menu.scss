@@ -22,18 +22,18 @@
 .menu--active {
   width: auto;
   overflow: auto;
-  padding: 70px 400px 30px 70px;
+  padding: 70px 130px 30px 60px;
 }
 
 .menu__close {
   position: absolute;
-  right: 70px;
-  fill: grey;
+  right: 40px;
+  fill: $main-text;
 
   &:hover {
     cursor: pointer;
     path {
-      fill: black;
+      fill: $main-text-border;
     }
   }
 }

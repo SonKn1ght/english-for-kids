@@ -3,8 +3,10 @@ html {
 }
 
 body {
+  height: 100%;
+  //position: relative;
   overflow-x: hidden;
-  font-family: xplor;
+  font-family: Krabuler;
   font-weight: 500;
 }
 
@@ -46,6 +48,10 @@ input[type="checkbox"].visually-hidden,
     clip: rect(0 0 0 0);
     overflow: hidden;
   }
+
+.hiddens {
+  visibility: hidden;
+}
 
 article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
   display: block;

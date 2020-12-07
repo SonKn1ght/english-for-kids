@@ -24,10 +24,12 @@ export class ControlView extends AbstractView {
 
   private menu: HTMLElement = this.getElement().querySelector(`.menu`);
 
+  private burger: HTMLElement = this.getElement().querySelector(`.hamburger`);
+
   constructor(
     private category: Array<string>,
     private activeMenuItem: string,
-    private mode: string | undefined,
+    private mode: string,
   ) {
     super();
   }
@@ -61,6 +63,9 @@ export class ControlView extends AbstractView {
                   Main Page
                 </a>
                 ${getTemplateMenu(this.category, this.activeMenuItem, this.mode)}
+                <a href="#stats/${this.mode}" class="menu__link ${this.activeMenuItem === `stats` ? MENU_LINK_ACTIVE : ``}">
+                  Stats
+                </a>
                 <svg class="menu__close" width="25" height="25" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                  <path fill-rule="evenodd" clip-rule="evenodd"
                  d="M7.42618 6.00003L11.7046 1.72158C12.0985 1.32775 12.0985 0.689213 11.7046 0.295433C11.3108 -0.0984027
@@ -93,6 +98,7 @@ export class ControlView extends AbstractView {
   private hamburgerClickHandler = (evt: MouseEvent): void => {
     evt.preventDefault();
 
+    this.burger.classList.add(`hiddens`);
     this.menu.classList.add(MENU_VISIBILITY);
     evt.stopPropagation();
     document.addEventListener(`click`, this.closeMenuHandler);
@@ -102,6 +108,7 @@ export class ControlView extends AbstractView {
     const targetClick = evt.target as HTMLElement;
 
     if (!targetClick.classList.contains(MENU)) {
+      this.burger.classList.remove(`hiddens`);
       this.menu.classList.remove(MENU_VISIBILITY);
       document.removeEventListener(`click`, this.closeMenuHandler);
     }
@@ -118,15 +125,6 @@ export class ControlView extends AbstractView {
         current.classList.add(MENU_LINK_ACTIVE);
       }
     });
-
-    // const clickTarget = evt.target as HTMLElement;
-    // const linksMenu: Array<HTMLElement> = Array.from(this.menu.querySelectorAll(`.menu__link `));
-    // linksMenu.forEach((current) => {
-    //   if (current.classList.contains(MENU_LINK_ACTIVE)) {
-    //     current.classList.remove(MENU_LINK_ACTIVE);
-    //   }
-    // });
-    // clickTarget.classList.add(MENU_LINK_ACTIVE);
   };
 
   modeClickHandler = (evt: MouseEvent): void => {

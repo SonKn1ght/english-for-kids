@@ -1,0 +1,51 @@
+.stats {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  overflow: auto;
+
+  @include media-mobile {
+    display: block;
+  }
+}
+
+.stats__table {
+  margin-bottom: 100px;
+  width: 80%;
+  font-size: 20px;
+  border-collapse: collapse;
+  box-shadow: 3px 3px 15px 2px rgba(0, 0, 0, 0.16);
+
+  @include media-tablet {
+    overflow-x: auto;
+    font-size: 20px;
+  }
+
+  @include media-mobile {
+    //width: 100%;
+    font-size: 16px;
+    top: 3px;
+  }
+}
+
+.stats__table-row:nth-child(odd) {
+  background-color: $row-table-stats;
+}
+
+.stats__table-row td {
+  padding: 3px 0;
+  text-align: center;
+}
+
+.stats__table-row-title {
+  background-color: $row-table-stats;
+
+  & td {
+    padding: 10px 0;
+    &:hover {
+      cursor: pointer;
+      background-color: $row-table-stats-hover;
+    }
+  }
+
+}

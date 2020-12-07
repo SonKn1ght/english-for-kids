@@ -16,6 +16,9 @@ const render = (container: HTMLElement, child: HTMLElement, place: string) => {
     case RenderPosition.BEFOREEND:
       container.append(child);
       break;
+    case RenderPosition.AFTER:
+      container.after(child);
+      break;
     default:
       throw new Error(`something broke in render function`);
   }

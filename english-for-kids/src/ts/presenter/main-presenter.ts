@@ -2,6 +2,7 @@ import {
   RenderPosition,
   MODE_GAME,
   MODE_TRAIN,
+  TypeUpdateStats,
 } from '../const/constants';
 import {
   render,
@@ -12,12 +13,15 @@ import {
   CategoriesView,
   CategoryItemView,
   ControlView,
+  StatsView,
+  FooterView,
 } from '../view';
 import { TCardItem } from "../const";
 
 const PAUSE_FOR_SIGNAL: number = 600;
 const PAUSE_FOR_END_GAME: number = 4000;
 const ROUTE_FOR_END_GAME: string = `main/game`;
+const WRAPPER_CARD = `.category-current__wrapper-item`;
 
 export class MainPresenter {
   private categoriesComponent: CategoriesView;
@@ -26,11 +30,25 @@ export class MainPresenter {
 
   private controlComponent: ControlView;
 
+  private statsComponent: StatsView;
+
+  private footerComponent: FooterView;
+
   private mixResourceGame: Array<TCardItem>;
 
   private currentGameAudio: string;
 
   private countErrorsCurrentGame: number = 0;
+
+  private stats: Array<any> = this.cardsModel.getStats();
+
+  private sortOptions: {
+    direction: boolean,
+    type: string,
+  } = {
+    direction: true,
+    type: `word`,
+  };
 
   private currentRoute: {
     category: string | undefined,
@@ -43,17 +61,34 @@ export class MainPresenter {
   constructor(
     private gameContainer: HTMLElement,
     private cardsModel: any,
-  ) {
-    // this.cardsModel.addObserver(this._handleModelEvent);
-  }
+  ) {}
 
-  // public init(mode: string) {
-  //   this.currentRoute.mode = mode;
-  //
-  //   this.clearMainContainer();
-  //   if (!this.controlComponent) this.renderControlView();
-  //   this.renderCategoriesView();
-  // }
+  public switchRoute(route: string): void {
+    [this.currentRoute.category, this.currentRoute.mode] = route.split(`/`);
+
+    if (!this.footerComponent) this.renderFooterView();
+
+    if (!this.controlComponent) this.renderControlView();
+    this.controlComponent.updateMenuItem(this.currentRoute.category);
+
+    if (this.categoryItemComponent || this.categoriesComponent || this.statsComponent) {
+      this.clearMainContainer();
+    }
+
+    if (this.currentRoute.category === `main`) {
+      this.renderCategoriesView();
+      return;
+    }
+
+    if (this.currentRoute.category === `stats`) {
+      this.renderStatsView();
+      return;
+    }
+
+    if (this.cardsModel.getCardsCategory().includes(this.currentRoute.category)) {
+      this.renderCategoryItemView();
+    }
+  }
 
   private renderCategoriesView(): void {
     const category = this.cardsModel.getCardsCategory();
@@ -80,9 +115,22 @@ export class MainPresenter {
     this.setHandlersControlComponent();
   }
 
+  private renderStatsView(): void {
+    this.stats = this.cardsModel.getStats();
+    this.statsComponent = new StatsView(this.stats);
+    render(this.gameContainer, this.statsComponent.getElement(), RenderPosition.BEFOREEND);
+    this.setHandlersStatsComponent();
+  }
+
+  private renderFooterView = (): void => {
+    this.footerComponent = new FooterView();
+    render(this.gameContainer, this.footerComponent.getElement(), RenderPosition.AFTER);
+  };
+
   private clearMainContainer(): void {
     if (this.categoriesComponent) remove(this.categoriesComponent);
     if (this.categoryItemComponent) remove(this.categoryItemComponent);
+    if (this.statsComponent) remove(this.statsComponent);
   }
 
   private setHandlersCategoriesComponent() {
@@ -103,6 +151,48 @@ export class MainPresenter {
     this.controlComponent.setModeClickHandler(this.handleModeClick);
   }
 
+  private setHandlersStatsComponent() {
+    this.statsComponent.setSortControlClickHandler(this.handleSortControlClick);
+  }
+
+  private handleSortControlClick = (evt: MouseEvent) => {
+    const targetClick = evt.target as HTMLElement;
+    if (this.sortOptions.type === targetClick.dataset.type) {
+      this.sortOptions.direction = !this.sortOptions.direction;
+    } else {
+      this.sortOptions.direction = true;
+      this.sortOptions.type = targetClick.dataset.type;
+    }
+
+    if (this.sortOptions.direction) {
+      this.stats.sort((a, b) => {
+        if (a[this.sortOptions.type] > b[this.sortOptions.type]) {
+          return 1;
+        }
+        if (a[this.sortOptions.type] < b[this.sortOptions.type]) {
+          return -1;
+        }
+        return 0;
+      });
+    } else {
+      this.stats.sort((a, b) => {
+        if (a[this.sortOptions.type] < b[this.sortOptions.type]) {
+          return 1;
+        }
+        if (a[this.sortOptions.type] > b[this.sortOptions.type]) {
+          return -1;
+        }
+        return 0;
+      });
+    }
+
+    remove(this.statsComponent);
+    // дубляж пофиксить
+    this.statsComponent = new StatsView(this.stats);
+    render(this.gameContainer, this.statsComponent.getElement(), RenderPosition.BEFOREEND);
+    this.setHandlersStatsComponent();
+  };
+
   private handleCardAudioClick = (evt: MouseEvent): void => {
     const targetClick = evt.target as HTMLElement;
     const BUTTON_FLIP_CARD = `category__rotate-button`;
@@ -115,6 +205,10 @@ export class MainPresenter {
 
     const audio = new Audio(`./assets/audio/${audioSrc.dataset.audio}`);
     audio.play();
+
+    const itemSrcStats: HTMLElement = targetClick.closest(WRAPPER_CARD);
+
+    this.cardsModel.updateStats(itemSrcStats.dataset.word, TypeUpdateStats.CLICKS);
   };
 
   private handleFlipButtonClick = (evt: MouseEvent): void => {
@@ -123,7 +217,6 @@ export class MainPresenter {
     const FLIP_BUTTON = `category__rotate-button`;
     if (!targetClick.classList.contains(FLIP_BUTTON)) return;
 
-    const WRAPPER_CARD = `.category-current__wrapper-item`;
     const wrapperCard: HTMLElement = targetClick.closest(WRAPPER_CARD);
     wrapperCard.classList.toggle(`category-current_flip`);
 
@@ -132,6 +225,8 @@ export class MainPresenter {
       wrapperCard.removeEventListener(`mouseleave`, leaveCardCallback);
     };
 
+    this.cardsModel.updateStats(wrapperCard.dataset.word, TypeUpdateStats.CLICKS);
+
     wrapperCard.addEventListener(`mouseleave`, leaveCardCallback);
   };
 
@@ -139,8 +234,6 @@ export class MainPresenter {
     const link = (evt.target as HTMLElement).closest(`a`);
     if (link === null) return;
     window.location.hash = link.hash;
-
-    // this._handleViewAction(UserAction.NEW_GAME, UpdateType.RESTART, this._optionGame);
   };
 
   private handleControlGameClick = (evt: MouseEvent): void => {
@@ -159,9 +252,10 @@ export class MainPresenter {
   };
 
   private handleGameCardsClick = (evt: MouseEvent): void => {
-    // this.categoryItemComponent.completeGame(0);
     const targetClick = evt.target as HTMLElement;
     const audioSrc = targetClick.closest(`a`);
+    const itemSrcStats: HTMLElement = targetClick.closest(WRAPPER_CARD);
+
     if (audioSrc === null) return;
 
     if (this.currentGameAudio === audioSrc.dataset.audio) {
@@ -174,11 +268,18 @@ export class MainPresenter {
         setTimeout((): void => {
           window.location.hash = ROUTE_FOR_END_GAME;
         }, PAUSE_FOR_END_GAME);
+
         this.categoryItemComponent.completeGame(this.countErrorsCurrentGame);
+        this.countErrorsCurrentGame = 0;
         return;
       }
+
+      this.cardsModel.updateStats(itemSrcStats.dataset.word, TypeUpdateStats.CORRECT);
+
       setTimeout(this.playAudioGame, PAUSE_FOR_SIGNAL);
     } else {
+      this.cardsModel.updateStats(itemSrcStats.dataset.word, TypeUpdateStats.WRONG);
+
       this.countErrorsCurrentGame += 1;
       this.categoryItemComponent
         .makeAnswer(targetClick, false);
@@ -201,45 +302,4 @@ export class MainPresenter {
     const audio = new Audio(`./assets/audio/${this.currentGameAudio}`);
     audio.play();
   };
-
-  public switchRoute(route: string): void {
-    [this.currentRoute.category, this.currentRoute.mode] = route.split(`/`);
-
-    if (!this.controlComponent) this.renderControlView();
-    this.controlComponent.updateMenuItem(this.currentRoute.category);
-
-    if (this.categoryItemComponent || this.categoriesComponent) {
-      this.clearMainContainer();
-    }
-
-    if (this.currentRoute.category === `main`) {
-      this.renderCategoriesView();
-      return;
-    }
-
-    if (this.cardsModel.getCardsCategory().includes(this.currentRoute.category)) {
-      this.renderCategoryItemView();
-    }
-  }
-
-  // public handleViewAction(actionType, updateType, update) {
-  //   switch (actionType) {
-  //     case UserAction.SWAP_BONE:
-  //       break;
-  //     default:
-  //       throw new Error(`something broke in handleViewAction`);
-  //   }
-  // }
-  //
-  // _handleModelEvent(updateType, data) {
-  //   switch (updateType) {
-  //     case UpdateType.MOVING:
-  //       this._gameComponent.swapBone(data.numberBone);
-  //       this._controlPanelComponent.updateCounter(data);
-  //       this._controlPanelComponent.playSoundPressBone();
-  //       break;
-  //     default:
-  //       throw new Error(`something broke in handleModelEvent`);
-  //   }
-  // }
 }
