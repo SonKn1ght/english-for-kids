@@ -34,14 +34,14 @@ module.exports = {
         },
       },
       {
-        test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+        test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'file-loader',
         options: {
           name: 'fonts/[name].[ext]',
         },
       },
       {
-        test: /\.(png|jpe?g|gif)$/i,
+        test: /\.(png|jpeg|gif|svg|jpg)$/i,
         loader: 'file-loader',
         options: {
           name: '[path][name].[ext]',
@@ -64,7 +64,7 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.(png|jpg|gif|svg|ico)$/i,
+        test: /\.(png|jpg|gif|ico)$/i,
         use: ['url-loader'],
       },
     ]

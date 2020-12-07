@@ -17,3 +17,6 @@ export enum RenderPosition {
   AFTERBEGIN = `afterbegin`,
   BEFOREEND = `beforeend`,
 }
+
+export const MODE_GAME = `game`;
+export const MODE_TRAIN = `train`;

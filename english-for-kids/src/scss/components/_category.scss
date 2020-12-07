@@ -3,6 +3,7 @@
 }
 
 .category__item {
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -28,3 +29,16 @@
   width: 80%;
   margin: 0 0 20px;
 }
+
+.category__item_active-game {
+  font-size: 0;
+
+
+  .category__image {
+    margin: 0;
+    width: 90%;
+  }
+}
+
+
+

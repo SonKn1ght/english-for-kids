@@ -7,25 +7,17 @@ export class Router {
   }
 
   public init(): void {
+    if (window.location.hash === `` || window.location.hash === `#`) window.location.hash = `main/train`;
     window.addEventListener(`hashchange`, this.handleHash);
     this.handleHash();
   }
 
   public handleHash = (): void => {
-    let route: string = this.getURL();
-    console.log(route)
-
-    if (!route || route === `/game`) {
-      route = route.replace(`/`,``)
-      this.presenter.init(route);
-    } else {
-      this.presenter.switchRoute(route);
-    }
+    const route: string = this.getURL();
+    this.presenter.switchRoute(route);
   };
 
   public getURL = (): string => {
-    const hash = window.location.hash ? window.location.hash.replace(`#`, ``) : ``;
-    console.log(`hash = ${hash}`);
-    return hash;
+    return window.location.hash.replace(`#`, ``);
   };
 }

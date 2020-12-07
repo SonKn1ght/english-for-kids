@@ -9,4 +9,6 @@ export {
   UpdateType,
   UserAction,
   RenderPosition,
+  MODE_GAME,
+  MODE_TRAIN,
 } from './constants';

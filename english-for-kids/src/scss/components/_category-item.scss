@@ -94,3 +94,56 @@
   filter: brightness(0.5) contrast(175%);
 }
 
+.category-current__item_active {
+  .category-current__image {
+    margin: 15px 0;
+    width: 90%;
+  }
+}
+
+.category-current {
+  .btn__game {
+    position: absolute;
+    bottom: -90px;
+    left: calc(50% - 80px);
+  }
+
+  .btn__game_repeat {
+    left: calc(50% - 35px);
+  }
+}
+
+.category-current__image_right-answer {
+  pointer-events: none;
+  background-color: yellowgreen;
+}
+
+.category-current__answer-indicator {
+  position: absolute;
+  left: 10%;
+  top: -60px;
+  width: 80%;
+  height: 40px;
+
+  display: flex;
+  gap: 9px;
+  justify-content: flex-end;
+
+  overflow: hidden;
+}
+
+.category-current__end-game {
+  //height: 100%;
+
+  position: absolute;
+  width: 100%;
+
+  background-color: white;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 22px;
+}

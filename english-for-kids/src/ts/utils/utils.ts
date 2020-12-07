@@ -34,4 +34,23 @@ const remove = (component: any) => {
   component.removeElement();
 };
 
-export { render, remove, createElement };
+// Array<any> - функция абстрактна и перемешивает любые массивы
+const shuffleArray = (array: Array<any>) => {
+  const mixedArray = array.slice();
+  for (let i = mixedArray.length - 1; i > 0; i -= 1) {
+    const randomIndex = Math.floor(Math.random() * (i + 1));
+    const tempValue = mixedArray[i];
+    mixedArray[i] = mixedArray[randomIndex];
+    mixedArray[randomIndex] = tempValue;
+  }
+  return mixedArray;
+};
+
+const playAudio = (data: string) => {
+  const audio = new Audio(data);
+  audio.play();
+};
+
+export {
+  render, remove, createElement, shuffleArray, playAudio,
+};
