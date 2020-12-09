@@ -5,22 +5,17 @@ export type TCardItem = {
   audioSrc: string,
   category: string,
 };
-
-// export type TCardItemStats = {
-//   word: string,
-//   translation: string,
-//   image: string,
-//   audioSrc: string,
-//   category: string,
-//   clicks: number,
-//   correct: number,
-//   wrong: number,
-//   errors: number,
-// };
-
-// пока не разобрался в методе updateStats() как описать корректно
+//
 export type TCardItemStats = {
-  [name: string]: any
+  word: string,
+  translation: string,
+  image: string,
+  audioSrc: string,
+  category: string,
+  clicks: number,
+  correct: number,
+  wrong: number,
+  errors: number,
 };
 
 export type TCardsCollections = Array<TCardItem>;

@@ -14,6 +14,10 @@ export class CardsModel {
     private cardsCategory: Array<string>,
   ) {}
 
+  public getCards(): Array<TCardItem> {
+    return this.cardsCollection;
+  }
+
   public getCardsChosenCategory(type: string): Array<TCardItem> {
     return this.cardsCollection.filter((currentCard) => {
       return currentCard.category === type;
@@ -25,7 +29,7 @@ export class CardsModel {
   }
 
   public checkStorage(): void {
-    if (window.localStorage.getItem(KEY_LOCAL_STORAGE_STATS) === null) {
+    if (JSON.parse(window.localStorage.getItem(KEY_LOCAL_STORAGE_STATS)) === null) {
       const newStats: Array<TCardItemStats> = this.cardsCollection
         .map((currentItem) => {
           return Object.assign(currentItem, {
@@ -45,10 +49,13 @@ export class CardsModel {
     this.checkStorage();
   }
 
-  public updateStats(id: string, key: string) {
+  public updateStats(id: string, key: keyof TCardItemStats) {
     const index: number = this.stats.findIndex((item) => item.word === id);
-    const updateItem = this.stats[index];
-    updateItem[key] += 1;
+    const updateItem: TCardItemStats = this.stats[index];
+
+    // лютый обкаст просто
+    const updValue: number = updateItem[key] as number + 1;
+    Object.assign(updateItem, { [key]: updValue });
 
     if (key === `correct` || key === `errors`) {
       if (updateItem.correct > 0 && updateItem.wrong > 0) {

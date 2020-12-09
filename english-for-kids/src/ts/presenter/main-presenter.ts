@@ -16,7 +16,10 @@ import {
   StatsView,
   FooterView,
 } from '../view';
-import { TCardItem } from "../const";
+import {
+  TCardItem,
+  TCardItemStats,
+} from "../const";
 
 const PAUSE_FOR_SIGNAL: number = 600;
 const PAUSE_FOR_END_GAME: number = 4000;
@@ -35,6 +38,8 @@ export class MainPresenter {
   private footerComponent: FooterView;
 
   private mixResourceGame: Array<TCardItem>;
+
+  private errorsCards: Array<TCardItem>;
 
   private currentGameAudio: string;
 
@@ -65,6 +70,7 @@ export class MainPresenter {
 
   public switchRoute(route: string): void {
     [this.currentRoute.category, this.currentRoute.mode] = route.split(`/`);
+    console.log(this.currentRoute)
 
     if (!this.footerComponent) this.renderFooterView();
 
@@ -82,6 +88,13 @@ export class MainPresenter {
 
     if (this.currentRoute.category === `stats`) {
       this.renderStatsView();
+      return;
+    }
+
+    if (this.currentRoute.category === `repeat`) {
+      this.categoryItemComponent = new CategoryItemView(this.errorsCards, this.currentRoute.mode);
+      render(this.gameContainer, this.categoryItemComponent.getElement(), RenderPosition.BEFOREEND);
+      this.setHandlersCategoryItemComponent();
       return;
     }
 
@@ -153,6 +166,7 @@ export class MainPresenter {
 
   private setHandlersStatsComponent() {
     this.statsComponent.setSortControlClickHandler(this.handleSortControlClick);
+    this.statsComponent.setControlStatsClickHandler(this.handleStatsControlClick);
   }
 
   private handleSortControlClick = (evt: MouseEvent) => {
@@ -191,6 +205,33 @@ export class MainPresenter {
     this.statsComponent = new StatsView(this.stats);
     render(this.gameContainer, this.statsComponent.getElement(), RenderPosition.BEFOREEND);
     this.setHandlersStatsComponent();
+  };
+
+  private handleStatsControlClick = (evt: MouseEvent) => {
+    const targetClick = evt.target as HTMLElement;
+    if (targetClick.id === ``) return;
+
+    if (targetClick.id === `reset`) {
+      this.cardsModel.clearStorage();
+      remove(this.statsComponent);
+      this.renderStatsView();
+    }
+
+    if (targetClick.id === `repeat`) {
+      const idErrorsCards = this.cardsModel.getStats()
+        .filter((current: TCardItemStats) => current.errors !== 0)
+        .sort((a: TCardItemStats, b: TCardItemStats) => {
+          return b.errors - a.errors;
+        }).slice(0, 8)
+        .reduce((acc: Array<string>, current: TCardItemStats) => {
+          acc.push(current.word);
+          return acc;
+        }, []);
+
+      this.errorsCards = this.cardsModel.getCards().filter((currentCard: TCardItem) => {
+        return idErrorsCards.includes(currentCard.word);
+      });
+    }
   };
 
   private handleCardAudioClick = (evt: MouseEvent): void => {
@@ -243,10 +284,15 @@ export class MainPresenter {
 
       this.categoryItemComponent.setGameCardsClickHandler(this.handleGameCardsClick);
 
-      const resourceGame: Array<TCardItem> = this.cardsModel
-        .getCardsChosenCategory(this.currentRoute.category);
+      // костыли
+      if (this.currentRoute.category === `repeat`) {
+        this.mixResourceGame = shuffleArray(this.errorsCards);
+      } else {
+        const resourceGame: Array<TCardItem> = this.cardsModel
+          .getCardsChosenCategory(this.currentRoute.category);
 
-      this.mixResourceGame = shuffleArray(resourceGame);
+        this.mixResourceGame = shuffleArray(resourceGame);
+      }
     }
     this.playAudioGame();
   };

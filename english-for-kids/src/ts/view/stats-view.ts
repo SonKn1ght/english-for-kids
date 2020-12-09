@@ -29,6 +29,10 @@ export class StatsView extends AbstractView {
 
   public getTemplate(): string {
     return `<div class="stats">
+              <div class="stats__btn-wrapper">
+                <div class="btn__stats" id="reset">Reset</div>
+                <a href="#repeat/game" class="btn__stats" id="repeat">Repeat difficult words</a>
+              </div>
               <table class="stats__table">
                 <tr class="stats__table-row stats__table-row-title">
                   <td
@@ -74,5 +78,15 @@ export class StatsView extends AbstractView {
     this.callback.sortControlClick = callback;
     this.getElement().querySelector(`.stats__table-row-title`)
       .addEventListener(`click`, this.sortControlClickHandler);
+  }
+
+  private controlStatClickHandler = (evt: MouseEvent): void => {
+    this.callback.controlStatsClick(evt);
+  };
+
+  public setControlStatsClickHandler(callback: (e: MouseEvent) => void): void {
+    this.callback.controlStatsClick = callback;
+    this.getElement().querySelector(`.stats__btn-wrapper`)
+      .addEventListener(`click`, this.controlStatClickHandler);
   }
 }

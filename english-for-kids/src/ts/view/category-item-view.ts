@@ -1,6 +1,7 @@
 import AbstractView from './absctract-view';
 import {
   TCardItem,
+  TCardItemStats,
   MODE_GAME,
   MODE_TRAIN,
 } from '../const';
