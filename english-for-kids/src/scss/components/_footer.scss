@@ -1,10 +1,20 @@
 footer {
-  text-align: right;
-  padding-right: 10px;
+  max-width: 1280px;
   width: 100%;
+  margin: 0 auto;
+
+  padding-right: 10px;
   display: flex;
+  text-align: right;
   flex-direction: column;
+
+  @include media-tablet {
+    width: 780px;
+  }
+
   @include media-mobile {
+    max-width: 450px;
+    width: 100%;
     padding: 70px 10px 0 0;
   }
 }

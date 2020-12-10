@@ -1,12 +1,12 @@
 import './scss/style.scss';
 
-import { CardsModel } from './ts/model/cards-model';
-import { MainPresenter } from './ts/presenter/main-presenter';
-import { Router } from "./ts/presenter/router";
+import { CardsModel } from './scripts/model/cards-model';
+import { MainPresenter } from './scripts/presenter/main-presenter';
+import { Router } from "./scripts/router";
 import {
   cards,
   categoryCards,
-} from './ts/const';
+} from './scripts/const';
 
 const bodyElement = document.querySelector(`body`);
 

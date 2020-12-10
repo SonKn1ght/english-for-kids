@@ -42,7 +42,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 15px 0;
+  padding: 35px 0 15px;
 
   @include reset-link;
   font-size: 25px;
@@ -61,7 +61,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 15px 0;
+  padding: 35px 0 15px;
 
   @include reset-link;
   font-size: 25px;
@@ -106,6 +106,7 @@
 
 .category-current__item_active {
   .category-current__image {
+
     margin: 15px 0;
     width: 90%;
   }
@@ -115,7 +116,7 @@
   .btn__game {
     position: absolute;
     bottom: -90px;
-    left: calc(50% - 80px);
+    left: calc(50% - 67px);
 
     @include media-tablet {
       bottom: -50px;
@@ -147,8 +148,6 @@
 }
 
 .category-current__end-game {
-  //height: 100%;
-
   position: absolute;
   width: 100%;
 

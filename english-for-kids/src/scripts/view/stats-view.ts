@@ -12,7 +12,7 @@ const getTemplateStatsItem = (statsInfo: Array<TCardItemStats>):string => {
                   <td>${current.clicks}</td>
                   <td>${current.correct}</td>
                   <td>${current.wrong}</td>
-                  <td>${current.errors}</td>
+                  <td>${current.errors}%</td>
                 </tr>`;
     return acc;
   }, ``);
@@ -31,7 +31,7 @@ export class StatsView extends AbstractView {
     return `<div class="stats">
               <div class="stats__btn-wrapper">
                 <div class="btn__stats" id="reset">Reset</div>
-                <a href="#repeat/game" class="btn__stats" id="repeat">Repeat difficult words</a>
+                <a href="#repeat/train" class="btn__stats" id="repeat">Repeat difficult words</a>
               </div>
               <table class="stats__table">
                 <tr class="stats__table-row stats__table-row-title">

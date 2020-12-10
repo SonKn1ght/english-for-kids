@@ -1,30 +1,50 @@
 import {
-  RenderPosition,
-  MODE_GAME,
-  MODE_TRAIN,
-  TypeUpdateStats,
-} from '../const/constants';
-import {
   render,
   remove,
   shuffleArray,
+  playAudio,
 } from '../utils/utils';
+import { CardsModel } from "../model/cards-model";
 import {
   CategoriesView,
   CategoryItemView,
   ControlView,
   StatsView,
   FooterView,
+  CategoryContainerView,
+  NoStatsErrorsView,
 } from '../view';
 import {
+  RenderPosition,
+  TypeCurrentRoute,
+  MODE_GAME,
+  MODE_TRAIN,
+  TypeUpdateStats,
   TCardItem,
   TCardItemStats,
+  DEFAULT_ROUTE,
+  categoryCards,
 } from "../const";
 
+const validateRoute = (category: string, mode: string): boolean => {
+  const categoryCheck = [...categoryCards, ...Object.values(TypeCurrentRoute)];
+  const modeCheck = [MODE_GAME, MODE_TRAIN];
+  if (!categoryCheck.includes(category) || !modeCheck.includes(mode)) {
+    window.location.hash = DEFAULT_ROUTE;
+    return true;
+  }
+  return false;
+};
+
 const PAUSE_FOR_SIGNAL: number = 600;
-const PAUSE_FOR_END_GAME: number = 4000;
+const PAUSE_FOR_NO_ERRORS: number = 800;
+const PAUSE_FOR_END_GAME: number = 3000;
 const ROUTE_FOR_END_GAME: string = `main/game`;
 const WRAPPER_CARD = `.category-current__wrapper-item`;
+const BUTTON_REPEAT_CLASS = `btn__game_repeat`;
+const START_ERRORS_VALUE_COUNT = 0;
+const IS_WORK_ON_BUGS: boolean = true;
+const TYPE_SORT_DEFAULT = `word`;
 
 export class MainPresenter {
   private categoriesComponent: CategoriesView;
@@ -37,27 +57,33 @@ export class MainPresenter {
 
   private footerComponent: FooterView;
 
+  private categoryContainerComponent: CategoryContainerView;
+
+  private noStatsErrorsComponent: NoStatsErrorsView;
+
   private mixResourceGame: Array<TCardItem>;
 
   private errorsCards: Array<TCardItem>;
 
   private currentGameAudio: string;
 
-  private countErrorsCurrentGame: number = 0;
+  private countErrorsCurrentGame: number = START_ERRORS_VALUE_COUNT;
 
-  private stats: Array<any> = this.cardsModel.getStats();
+  private stats: Array<TCardItemStats>;
+
+  private isFirstStart: boolean = true;
 
   private sortOptions: {
     direction: boolean,
     type: string,
   } = {
     direction: true,
-    type: `word`,
+    type: TYPE_SORT_DEFAULT,
   };
 
   private currentRoute: {
-    category: string | undefined,
-    mode: string | undefined,
+    category: string,
+    mode: string,
   } = {
     category: ``,
     mode: ``,
@@ -65,56 +91,96 @@ export class MainPresenter {
 
   constructor(
     private gameContainer: HTMLElement,
-    private cardsModel: any,
+    private cardsModel: CardsModel,
   ) {}
 
   public switchRoute(route: string): void {
     [this.currentRoute.category, this.currentRoute.mode] = route.split(`/`);
-    console.log(this.currentRoute)
+    if (validateRoute(this.currentRoute.category, this.currentRoute.mode)) return;
 
-    if (!this.footerComponent) this.renderFooterView();
+    if (this.isFirstStart) {
+      this.renderControlView();
+      this.renderCategoryContainerView();
+      this.renderFooterView();
 
-    if (!this.controlComponent) this.renderControlView();
-    this.controlComponent.updateMenuItem(this.currentRoute.category);
-
-    if (this.categoryItemComponent || this.categoriesComponent || this.statsComponent) {
-      this.clearMainContainer();
+      this.isFirstStart = !this.isFirstStart;
     }
-
-    if (this.currentRoute.category === `main`) {
-      this.renderCategoriesView();
-      return;
-    }
-
-    if (this.currentRoute.category === `stats`) {
-      this.renderStatsView();
-      return;
-    }
-
-    if (this.currentRoute.category === `repeat`) {
-      this.categoryItemComponent = new CategoryItemView(this.errorsCards, this.currentRoute.mode);
-      render(this.gameContainer, this.categoryItemComponent.getElement(), RenderPosition.BEFOREEND);
-      this.setHandlersCategoryItemComponent();
-      return;
-    }
-
+    this.controlComponent.updateStateControlView(
+      this.currentRoute.category,
+      this.currentRoute.mode,
+    );
+    this.clearMainContainer();
     if (this.cardsModel.getCardsCategory().includes(this.currentRoute.category)) {
       this.renderCategoryItemView();
+      return;
     }
+
+    switch (this.currentRoute.category) {
+      case TypeCurrentRoute.MAIN:
+        this.renderCategoriesView();
+        break;
+      case TypeCurrentRoute.STATS:
+        this.renderStatsView();
+        break;
+      case TypeCurrentRoute.REPEAT:
+        this.renderCategoryItemView(IS_WORK_ON_BUGS);
+        break;
+      default:
+        break;
+    }
+  }
+
+  private renderCategoryContainerView(): void {
+    this.categoryContainerComponent = new CategoryContainerView();
+    render(
+      this.gameContainer,
+      this.categoryContainerComponent.getElement(),
+      RenderPosition.BEFOREEND,
+    );
   }
 
   private renderCategoriesView(): void {
     const category = this.cardsModel.getCardsCategory();
     this.categoriesComponent = new CategoriesView(category, this.currentRoute.mode);
-    render(this.gameContainer, this.categoriesComponent.getElement(), RenderPosition.BEFOREEND);
+    render(
+      this.categoryContainerComponent.getElement(),
+      this.categoriesComponent.getElement(),
+      RenderPosition.BEFOREEND,
+    );
     this.setHandlersCategoriesComponent();
   }
 
-  private renderCategoryItemView(): void {
-    const currentCategory = this.cardsModel.getCardsChosenCategory(this.currentRoute.category);
-    this.categoryItemComponent = new CategoryItemView(currentCategory, this.currentRoute.mode);
-    render(this.gameContainer, this.categoryItemComponent.getElement(), RenderPosition.BEFOREEND);
+  private renderCategoryItemView(isWorkOnBugs: boolean = false): void {
+    if (!isWorkOnBugs) {
+      const currentCategory = this.cardsModel.getCardsChosenCategory(this.currentRoute.category);
+      this.categoryItemComponent = new CategoryItemView(currentCategory, this.currentRoute.mode);
+    } else {
+      this.errorsCards = this.cardsModel.getErrorCards();
+
+      if (!this.errorsCards.length) {
+        this.renderNoStatsErrorsView();
+        setTimeout(() => {
+          window.location.hash = DEFAULT_ROUTE;
+        }, PAUSE_FOR_NO_ERRORS);
+        return;
+      }
+      this.categoryItemComponent = new CategoryItemView(this.errorsCards, this.currentRoute.mode);
+    }
+    render(
+      this.categoryContainerComponent.getElement(),
+      this.categoryItemComponent.getElement(),
+      RenderPosition.BEFOREEND,
+    );
     this.setHandlersCategoryItemComponent();
+  }
+
+  private renderNoStatsErrorsView() {
+    this.noStatsErrorsComponent = new NoStatsErrorsView();
+    render(
+      this.categoryContainerComponent.getElement(),
+      this.noStatsErrorsComponent.getElement(),
+      RenderPosition.BEFOREEND,
+    );
   }
 
   private renderControlView(): void {
@@ -128,22 +194,28 @@ export class MainPresenter {
     this.setHandlersControlComponent();
   }
 
-  private renderStatsView(): void {
-    this.stats = this.cardsModel.getStats();
+  private renderStatsView(sortStats: boolean = false): void {
+    if (!sortStats) this.stats = this.cardsModel.getStats();
+
     this.statsComponent = new StatsView(this.stats);
-    render(this.gameContainer, this.statsComponent.getElement(), RenderPosition.BEFOREEND);
+    render(
+      this.categoryContainerComponent.getElement(),
+      this.statsComponent.getElement(),
+      RenderPosition.BEFOREEND,
+    );
     this.setHandlersStatsComponent();
   }
 
   private renderFooterView = (): void => {
     this.footerComponent = new FooterView();
-    render(this.gameContainer, this.footerComponent.getElement(), RenderPosition.AFTER);
+    render(this.gameContainer, this.footerComponent.getElement(), RenderPosition.BEFOREEND);
   };
 
   private clearMainContainer(): void {
     if (this.categoriesComponent) remove(this.categoriesComponent);
     if (this.categoryItemComponent) remove(this.categoryItemComponent);
     if (this.statsComponent) remove(this.statsComponent);
+    if (this.noStatsErrorsComponent) remove(this.noStatsErrorsComponent);
   }
 
   private setHandlersCategoriesComponent() {
@@ -178,22 +250,23 @@ export class MainPresenter {
       this.sortOptions.type = targetClick.dataset.type;
     }
 
+    const compareSortIndex = this.sortOptions.type as keyof TCardItemStats;
     if (this.sortOptions.direction) {
       this.stats.sort((a, b) => {
-        if (a[this.sortOptions.type] > b[this.sortOptions.type]) {
+        if (a[compareSortIndex] > b[compareSortIndex]) {
           return 1;
         }
-        if (a[this.sortOptions.type] < b[this.sortOptions.type]) {
+        if (a[compareSortIndex] < b[compareSortIndex]) {
           return -1;
         }
         return 0;
       });
     } else {
       this.stats.sort((a, b) => {
-        if (a[this.sortOptions.type] < b[this.sortOptions.type]) {
+        if (a[compareSortIndex] < b[compareSortIndex]) {
           return 1;
         }
-        if (a[this.sortOptions.type] > b[this.sortOptions.type]) {
+        if (a[compareSortIndex] > b[compareSortIndex]) {
           return -1;
         }
         return 0;
@@ -201,10 +274,8 @@ export class MainPresenter {
     }
 
     remove(this.statsComponent);
-    // дубляж пофиксить
-    this.statsComponent = new StatsView(this.stats);
-    render(this.gameContainer, this.statsComponent.getElement(), RenderPosition.BEFOREEND);
-    this.setHandlersStatsComponent();
+    const OPTION_RENDER_STATS: boolean = true;
+    this.renderStatsView(OPTION_RENDER_STATS);
   };
 
   private handleStatsControlClick = (evt: MouseEvent) => {
@@ -215,22 +286,6 @@ export class MainPresenter {
       this.cardsModel.clearStorage();
       remove(this.statsComponent);
       this.renderStatsView();
-    }
-
-    if (targetClick.id === `repeat`) {
-      const idErrorsCards = this.cardsModel.getStats()
-        .filter((current: TCardItemStats) => current.errors !== 0)
-        .sort((a: TCardItemStats, b: TCardItemStats) => {
-          return b.errors - a.errors;
-        }).slice(0, 8)
-        .reduce((acc: Array<string>, current: TCardItemStats) => {
-          acc.push(current.word);
-          return acc;
-        }, []);
-
-      this.errorsCards = this.cardsModel.getCards().filter((currentCard: TCardItem) => {
-        return idErrorsCards.includes(currentCard.word);
-      });
     }
   };
 
@@ -280,17 +335,15 @@ export class MainPresenter {
   private handleControlGameClick = (evt: MouseEvent): void => {
     if (!this.mixResourceGame) {
       const targetClick = evt.target as HTMLElement;
-      targetClick.classList.add(`btn__game_repeat`);
+      targetClick.classList.add(BUTTON_REPEAT_CLASS);
 
       this.categoryItemComponent.setGameCardsClickHandler(this.handleGameCardsClick);
 
-      // костыли
-      if (this.currentRoute.category === `repeat`) {
+      if (this.currentRoute.category === TypeCurrentRoute.REPEAT) {
         this.mixResourceGame = shuffleArray(this.errorsCards);
       } else {
         const resourceGame: Array<TCardItem> = this.cardsModel
           .getCardsChosenCategory(this.currentRoute.category);
-
         this.mixResourceGame = shuffleArray(resourceGame);
       }
     }
@@ -310,13 +363,13 @@ export class MainPresenter {
 
       this.mixResourceGame.pop();
 
-      if (this.mixResourceGame.length === 0) {
+      if (!this.mixResourceGame.length) {
         setTimeout((): void => {
           window.location.hash = ROUTE_FOR_END_GAME;
         }, PAUSE_FOR_END_GAME);
 
         this.categoryItemComponent.completeGame(this.countErrorsCurrentGame);
-        this.countErrorsCurrentGame = 0;
+        this.countErrorsCurrentGame = START_ERRORS_VALUE_COUNT;
         return;
       }
 
@@ -326,6 +379,7 @@ export class MainPresenter {
     } else {
       this.cardsModel.updateStats(itemSrcStats.dataset.word, TypeUpdateStats.WRONG);
 
+      // линейный рост счетчика. тут допустимо число без переменной? не магия?
       this.countErrorsCurrentGame += 1;
       this.categoryItemComponent
         .makeAnswer(targetClick, false);
@@ -343,9 +397,8 @@ export class MainPresenter {
     window.location.hash = window.location.hash.replace(MODE_GAME, MODE_TRAIN);
   };
 
-  private playAudioGame = () => {
+  private playAudioGame = (): void => {
     this.currentGameAudio = this.mixResourceGame[this.mixResourceGame.length - 1].audioSrc;
-    const audio = new Audio(`./assets/audio/${this.currentGameAudio}`);
-    audio.play();
+    playAudio(`./assets/audio/${this.currentGameAudio}`);
   };
 }

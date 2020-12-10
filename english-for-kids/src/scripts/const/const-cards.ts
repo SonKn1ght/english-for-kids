@@ -5,12 +5,10 @@ export type TCardItem = {
   audioSrc: string,
   category: string,
 };
-//
+
 export type TCardItemStats = {
   word: string,
   translation: string,
-  image: string,
-  audioSrc: string,
   category: string,
   clicks: number,
   correct: number,
@@ -335,7 +333,7 @@ export const cards: TCardsCollections = [
   },
   {
     word: `shirt`,
-    translation: `Рубашка`,
+    translation: `рубашка`,
     image: `clothes/shirt.svgz`,
     audioSrc: `clothes/shirt.mp3`,
     category: `Clothes`,

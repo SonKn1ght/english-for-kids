@@ -37,7 +37,6 @@ const remove = (component: any) => {
   component.removeElement();
 };
 
-// Array<any> - функция абстрактна и перемешивает любые массивы
 const shuffleArray = (array: Array<any>) => {
   const mixedArray = array.slice();
   for (let i = mixedArray.length - 1; i > 0; i -= 1) {

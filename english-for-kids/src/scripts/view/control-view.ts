@@ -6,7 +6,17 @@ import {
 
 const MENU_VISIBILITY: string = `menu--active`;
 const MENU: string = `menu`;
+const HIDDEN_ELEMENT_CLASS = `hidden`;
 const MENU_LINK_ACTIVE: string = `menu__link-active`;
+
+const switchLinkMode = (link: HTMLElement): void => {
+  const currentLink = link.getAttribute(`href`);
+  if (currentLink.includes(MODE_GAME)) {
+    link.setAttribute(`href`, currentLink.replace(MODE_GAME, MODE_TRAIN));
+  } else {
+    link.setAttribute(`href`, currentLink.replace(MODE_TRAIN, MODE_GAME));
+  }
+};
 
 const getTemplateMenu = (category: Array<string>, active: string, mode: string):string => {
   return category.reduce((acc, current) => {
@@ -26,6 +36,12 @@ export class ControlView extends AbstractView {
 
   private burger: HTMLElement = this.getElement().querySelector(`.hamburger`);
 
+  private linkLogoMain: HTMLElement = this.getElement().querySelector(`.main-header__link-logo`);
+
+  private linksMenu: Array<HTMLElement> = Array.from(this.menu.querySelectorAll(`.menu__link `));
+
+  private indicatorMode: HTMLElement = this.getElement().querySelector(`.indicatorModeJs`);
+
   constructor(
     private category: Array<string>,
     private activeMenuItem: string,
@@ -39,7 +55,7 @@ export class ControlView extends AbstractView {
               <span class="header__hamburger hamburger">
                 <span class="hamburger__line"></span>
               </span>
-              <a href="#main/${this.mode}">
+              <a href="#main/${this.mode}" class="main-header__link-logo">
                 <img
                   src="./assets/img/logo.png"
                   width="541"
@@ -51,7 +67,7 @@ export class ControlView extends AbstractView {
               <div class="toggle">
                 <label>
                     <input
-                      class="visually-hidden"
+                      class="visually-hidden indicatorModeJs"
                       type="checkbox"
                       ${this.mode === MODE_GAME ? `checked` : ``}
                       >
@@ -80,15 +96,11 @@ export class ControlView extends AbstractView {
   }
 
   public switchLinks(): void {
-    const links: Array<HTMLElement> = Array.from(this.getElement().querySelectorAll(`a`));
-    links.forEach((current) => {
-      const currentLink = current.getAttribute(`href`);
-      if (currentLink.includes(MODE_GAME)) {
-        current.setAttribute(`href`, currentLink.replace(MODE_GAME, MODE_TRAIN));
-      } else {
-        current.setAttribute(`href`, currentLink.replace(MODE_TRAIN, MODE_GAME));
-      }
+    this.linksMenu.forEach((current) => {
+      switchLinkMode(current);
     });
+
+    switchLinkMode(this.linkLogoMain);
   }
 
   public setInnerHandlers(): void {
@@ -97,10 +109,10 @@ export class ControlView extends AbstractView {
 
   private hamburgerClickHandler = (evt: MouseEvent): void => {
     evt.preventDefault();
-
-    this.burger.classList.add(`hiddens`);
+    this.burger.classList.add(HIDDEN_ELEMENT_CLASS);
     this.menu.classList.add(MENU_VISIBILITY);
     evt.stopPropagation();
+
     document.addEventListener(`click`, this.closeMenuHandler);
   };
 
@@ -108,24 +120,44 @@ export class ControlView extends AbstractView {
     const targetClick = evt.target as HTMLElement;
 
     if (!targetClick.classList.contains(MENU)) {
-      this.burger.classList.remove(`hiddens`);
+      this.burger.classList.remove(HIDDEN_ELEMENT_CLASS);
       this.menu.classList.remove(MENU_VISIBILITY);
       document.removeEventListener(`click`, this.closeMenuHandler);
     }
   };
 
-  public updateMenuItem = (category: string):void => {
-    const linksMenu: Array<HTMLElement> = Array.from(this.menu.querySelectorAll(`.menu__link `));
-    linksMenu.forEach((current) => {
+  public updateStateControlView = (category: string, mode: string):void => {
+    if (category !== this.activeMenuItem) {
+      this.activeMenuItem = category;
+      this.updateStateMenu();
+    }
+
+    if (mode !== this.mode) {
+      this.mode = mode;
+      this.updateStateIndicatorMode();
+    }
+  };
+
+  private updateStateMenu(): void {
+    this.linksMenu.forEach((current) => {
       if (current.classList.contains(MENU_LINK_ACTIVE)) {
         current.classList.remove(MENU_LINK_ACTIVE);
       }
       const linkMenu: string = current.getAttribute(`href`);
-      if (linkMenu.includes(category)) {
+      if (linkMenu.includes(this.activeMenuItem)) {
         current.classList.add(MENU_LINK_ACTIVE);
       }
     });
-  };
+  }
+
+  private updateStateIndicatorMode(): void {
+    const target = this.indicatorMode as HTMLInputElement;
+    if (this.mode === MODE_GAME) {
+      target.checked = true;
+      return;
+    }
+    target.checked = false;
+  }
 
   modeClickHandler = (evt: MouseEvent): void => {
     this.callback.modeClick(evt);

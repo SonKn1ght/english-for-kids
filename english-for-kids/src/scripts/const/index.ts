@@ -4,12 +4,13 @@ export {
   TCardsCollections,
   TCardItem,
   TCardItemStats,
-} from './const-model';
+} from './const-cards';
 
 export {
   TypeUpdateStats,
-  UserAction,
+  TypeCurrentRoute,
   RenderPosition,
   MODE_GAME,
   MODE_TRAIN,
+  DEFAULT_ROUTE,
 } from './constants';

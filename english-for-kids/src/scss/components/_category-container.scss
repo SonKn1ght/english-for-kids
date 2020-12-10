@@ -1,0 +1,6 @@
+.category-container {
+  min-height: calc(100vh - 260px);
+  @include media-mobile {
+    min-height: calc(100vh - 260px);
+  }
+}

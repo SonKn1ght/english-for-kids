@@ -1,14 +1,12 @@
-export enum UserAction {
-  SWAP_BONE = `SWAP_BONE`,
-  NEW_GAME = `NEW_GAME`,
-  SHOW_HOW_WIN = `SHOW_HOW_WIN`,
-  SCORING_SWAP_BONE = `SCORING_SWAP_BONE`,
+export enum TypeCurrentRoute {
+  MAIN = `main`,
+  STATS = `stats`,
+  REPEAT = `repeat`,
 }
 
 export enum TypeUpdateStats {
   CLICKS = `clicks`,
   CORRECT = `correct`,
-  ERRORS = `errors`,
   WRONG = `wrong`,
 }
 
@@ -17,6 +15,8 @@ export enum RenderPosition {
   BEFOREEND = `beforeend`,
   AFTER = `after`,
 }
+
+export const DEFAULT_ROUTE = `main/train`;
 
 export const MODE_GAME = `game`;
 export const MODE_TRAIN = `train`;

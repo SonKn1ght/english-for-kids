@@ -1,7 +1,6 @@
 import AbstractView from './absctract-view';
 import {
   TCardItem,
-  TCardItemStats,
   MODE_GAME,
   MODE_TRAIN,
 } from '../const';
@@ -94,7 +93,7 @@ export class CategoryItemView extends AbstractView {
   }
 
   public completeGame(countErrors: number): void {
-    if (countErrors !== 0) {
+    if (countErrors) {
       this.getElement().innerHTML = `<div class="category-current__end-game">
                                         <p>Errors: ${countErrors}</p>
                                         <img src="${LOSE_IMAGE_SRC}" alt="">

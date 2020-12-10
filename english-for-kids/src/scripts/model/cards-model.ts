@@ -5,6 +5,11 @@ import {
 } from '../const';
 
 const KEY_LOCAL_STORAGE_STATS = `myMegaCardsSuperStatsOfThisAppOnGodModeIDDQD`;
+const ERRORS_CATEGORY_LENGTH = 8;
+const ERRORS_CATEGORY_START = 0;
+const PERCENTAGE_FACTOR = 100;
+const KEY_CARDS_CORRECT = `correct`;
+const KEY_CARDS_ERRORS = `errors`;
 
 export class CardsModel {
   private stats: Array<TCardItemStats>;
@@ -28,16 +33,38 @@ export class CardsModel {
     return this.cardsCategory;
   }
 
+  public getErrorCards(): Array<TCardItem> {
+    // O(n^100500)
+    const idErrorsCards: Array<string> = this.getStats()
+      .filter((current: TCardItemStats) => current.errors !== 0)
+      .sort((firstCard: TCardItemStats, secondCard: TCardItemStats) => {
+        return secondCard.errors - firstCard.errors;
+      })
+      .slice(ERRORS_CATEGORY_START, ERRORS_CATEGORY_LENGTH)
+      .reduce((acc: Array<string>, current: TCardItemStats) => {
+        acc.push(current.word);
+        return acc;
+      }, []);
+
+    return this.getCards().filter((currentCard: TCardItem) => {
+      return idErrorsCards.includes(currentCard.word);
+    });
+  }
+
   public checkStorage(): void {
     if (JSON.parse(window.localStorage.getItem(KEY_LOCAL_STORAGE_STATS)) === null) {
       const newStats: Array<TCardItemStats> = this.cardsCollection
         .map((currentItem) => {
-          return Object.assign(currentItem, {
+          const copyItem: TCardItem = { ...currentItem };
+          const itemStats = Object.assign(copyItem, {
             clicks: 0,
             correct: 0,
             wrong: 0,
             errors: 0,
           });
+          delete itemStats.image;
+          delete itemStats.audioSrc;
+          return itemStats;
         });
       window.localStorage.setItem(KEY_LOCAL_STORAGE_STATS, JSON.stringify(newStats));
     }
@@ -53,13 +80,13 @@ export class CardsModel {
     const index: number = this.stats.findIndex((item) => item.word === id);
     const updateItem: TCardItemStats = this.stats[index];
 
-    // лютый обкаст просто
     const updValue: number = updateItem[key] as number + 1;
     Object.assign(updateItem, { [key]: updValue });
 
-    if (key === `correct` || key === `errors`) {
+    if (key === KEY_CARDS_CORRECT || key === KEY_CARDS_ERRORS) {
       if (updateItem.correct > 0 && updateItem.wrong > 0) {
-        updateItem.errors = Math.floor((updateItem.correct / updateItem.wrong) * 100) / 100;
+        updateItem.errors = Math.floor((updateItem.wrong / (updateItem.correct + updateItem.wrong))
+          * PERCENTAGE_FACTOR);
       }
     }
 
@@ -71,7 +98,7 @@ export class CardsModel {
     window.localStorage.setItem(KEY_LOCAL_STORAGE_STATS, JSON.stringify(this.stats));
   }
 
-  public getStats(): void {
+  public getStats(): Array<TCardItemStats> {
     return JSON.parse(window.localStorage.getItem(KEY_LOCAL_STORAGE_STATS));
   }
 }

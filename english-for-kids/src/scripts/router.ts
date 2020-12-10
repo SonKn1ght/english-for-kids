@@ -1,4 +1,4 @@
-import { MainPresenter } from "./main-presenter";
+import { MainPresenter } from "./presenter/main-presenter";
 
 export class Router {
   constructor(
@@ -7,7 +7,6 @@ export class Router {
   }
 
   public init(): void {
-    if (window.location.hash === `` || window.location.hash === `#`) window.location.hash = `main/train`;
     window.addEventListener(`hashchange`, this.handleHash);
     this.handleHash();
   }
