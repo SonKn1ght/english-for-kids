@@ -250,27 +250,18 @@ export class MainPresenter {
     }
 
     const compareSortIndex = this.sortOptions.type as keyof TCardItemStats;
-    if (this.sortOptions.direction) {
-      this.stats.sort((a, b) => {
-        if (a[compareSortIndex] > b[compareSortIndex]) {
-          return 1;
-        }
-        if (a[compareSortIndex] < b[compareSortIndex]) {
-          return -1;
-        }
-        return 0;
-      });
-    } else {
-      this.stats.sort((a, b) => {
-        if (a[compareSortIndex] < b[compareSortIndex]) {
-          return 1;
-        }
-        if (a[compareSortIndex] > b[compareSortIndex]) {
-          return -1;
-        }
-        return 0;
-      });
-    }
+
+    const sortIndex = this.sortOptions.direction ? 1 : -1;
+
+    this.stats.sort((a, b) => {
+      if (a[compareSortIndex] > b[compareSortIndex]) {
+        return 1 * sortIndex;
+      }
+      if (a[compareSortIndex] < b[compareSortIndex]) {
+        return -1 * sortIndex;
+      }
+      return 0;
+    });
 
     remove(this.statsComponent);
     const OPTION_RENDER_STATS: boolean = true;
