@@ -8,7 +8,7 @@ const createElement = (template: string) => {
   return newElement.firstChild;
 };
 
-const render = (container: HTMLElement, child: HTMLElement, place: string) => {
+const render = (container: HTMLElement, child: HTMLElement, place: RenderPosition) => {
   switch (place) {
     case RenderPosition.AFTERBEGIN:
       container.prepend(child);
