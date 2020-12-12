@@ -1,8 +1,7 @@
 import AbstractView from './absctract-view';
 import {
   TCardItem,
-  MODE_GAME,
-  MODE_TRAIN,
+  Mode,
 } from '../const';
 import { playAudio } from "../utils/utils";
 
@@ -23,16 +22,16 @@ const getTemplateItem = (category: Array<TCardItem>, mode: string): string => {
              class="category-current__wrapper-item"
              data-word="${current.word}">
               <a
-               class="category-current__front-item ${mode === MODE_GAME ? `category-current__item_active` : ``}"
+               class="category-current__front-item ${mode === Mode.GAME ? `category-current__item_active` : ``}"
                data-audio="${current.audioSrc}">
                 <img
                 class="category-current__image"
                 src="./assets/img/${current.image}"
                 alt="${current.word}"
                 >
-                <span class="${mode === MODE_GAME ? `visually-hidden` : ``}">${current.word}</span>
+                <span class="${mode === Mode.GAME ? `visually-hidden` : ``}">${current.word}</span>
                 <img
-                class="category__rotate-button ${mode === MODE_GAME ? `visually-hidden` : ``}"
+                class="category__rotate-button ${mode === Mode.GAME ? `visually-hidden` : ``}"
                 width="35"
                 height="35"
                 src="./assets/img/rotate.svg"
@@ -67,7 +66,7 @@ export class CategoryItemView extends AbstractView {
               <div class="category-current__answer-indicator"></div>
               ${getTemplateItem(this.item, this.mode)}
               <div
-              class="btn__game category-current___btn__game ${this.mode === MODE_TRAIN ? `visually-hidden` : ``}">
+              class="btn__game category-current___btn__game ${this.mode === Mode.TRAIN ? `visually-hidden` : ``}">
               Start Game
               </div>
             </div>`;

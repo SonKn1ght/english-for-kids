@@ -1,14 +1,11 @@
 import AbstractView from './absctract-view';
-import {
-  MODE_TRAIN,
-  MODE_GAME,
-} from "../const";
+import { Mode } from "../const";
 
 const getTemplateCategory = (category: Array<string>, mode: string): string => {
   return category.reduce((acc, current) => {
     acc += `<a
               href="#${current}/${mode}"
-              class="category__item ${mode === MODE_GAME ? `category__item_active-game` : ``}">
+              class="category__item ${mode === Mode.GAME ? `category__item_active-game` : ``}">
               <img
               src="./assets/img/category/${current}.svgz"
               alt="${current}"
@@ -41,10 +38,10 @@ export class CategoriesView extends AbstractView {
     this.links = Array.from(this.getElement().querySelectorAll(`.category__item`));
     this.links.forEach((current) => {
       const currentLink = current.getAttribute(`href`);
-      if (currentLink.includes(MODE_GAME)) {
-        current.setAttribute(`href`, currentLink.replace(MODE_GAME, MODE_TRAIN));
+      if (currentLink.includes(Mode.GAME)) {
+        current.setAttribute(`href`, currentLink.replace(Mode.GAME, Mode.TRAIN));
       } else {
-        current.setAttribute(`href`, currentLink.replace(MODE_TRAIN, MODE_GAME));
+        current.setAttribute(`href`, currentLink.replace(Mode.TRAIN, Mode.GAME));
       }
     });
   }

@@ -17,8 +17,7 @@ import {
 import {
   RenderPosition,
   TypeCurrentRoute,
-  MODE_GAME,
-  MODE_TRAIN,
+  Mode,
   TypeUpdateStats,
   TCardItem,
   TCardItemStats,
@@ -26,9 +25,9 @@ import {
   categoryCards,
 } from "../const";
 
-const validateRoute = (category: string, mode: string): boolean => {
+const validateRoute = (category: string, mode: Mode): boolean => {
   const categoryCheck = [...categoryCards, ...Object.values(TypeCurrentRoute)];
-  const modeCheck = [MODE_GAME, MODE_TRAIN];
+  const modeCheck = [Mode.GAME, Mode.TRAIN];
   if (!categoryCheck.includes(category) || !modeCheck.includes(mode)) {
     window.location.hash = DEFAULT_ROUTE;
     return true;
@@ -96,7 +95,7 @@ export class MainPresenter {
 
   public switchRoute(route: string): void {
     [this.currentRoute.category, this.currentRoute.mode] = route.split(`/`);
-    if (validateRoute(this.currentRoute.category, this.currentRoute.mode)) return;
+    if (validateRoute(this.currentRoute.category, this.currentRoute.mode as Mode)) return;
 
     if (this.isFirstStart) {
       this.renderControlView();
@@ -223,7 +222,7 @@ export class MainPresenter {
   }
 
   private setHandlersCategoryItemComponent() {
-    if (this.currentRoute.mode === MODE_TRAIN) {
+    if (this.currentRoute.mode === Mode.TRAIN) {
       this.categoryItemComponent.setCardAudioClickHandler(this.handleCardAudioClick);
       this.categoryItemComponent.setFlipButtonClickHandler(this.handleFlipButtonClick);
     } else {
@@ -387,14 +386,14 @@ export class MainPresenter {
   };
 
   private handleModeClick = (): void => {
-    const currentMode = window.location.hash.includes(MODE_GAME) ? MODE_TRAIN : MODE_GAME;
+    const currentMode = window.location.hash.includes(Mode.GAME) ? Mode.TRAIN : Mode.GAME;
     this.controlComponent.switchLinks();
 
-    if (currentMode === MODE_GAME) {
-      window.location.hash = window.location.hash.replace(MODE_TRAIN, MODE_GAME);
+    if (currentMode === Mode.GAME) {
+      window.location.hash = window.location.hash.replace(Mode.TRAIN, Mode.GAME);
       return;
     }
-    window.location.hash = window.location.hash.replace(MODE_GAME, MODE_TRAIN);
+    window.location.hash = window.location.hash.replace(Mode.GAME, Mode.TRAIN);
   };
 
   private playAudioGame = (): void => {

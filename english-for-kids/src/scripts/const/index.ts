@@ -10,7 +10,6 @@ export {
   TypeUpdateStats,
   TypeCurrentRoute,
   RenderPosition,
-  MODE_GAME,
-  MODE_TRAIN,
   DEFAULT_ROUTE,
+  Mode,
 } from './constants';

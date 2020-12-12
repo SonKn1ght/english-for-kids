@@ -16,7 +16,9 @@ export enum RenderPosition {
   AFTER = `after`,
 }
 
-export const DEFAULT_ROUTE = `main/train`;
+export enum Mode {
+  GAME = `game`,
+  TRAIN = `train`,
+}
 
-export const MODE_GAME = `game`;
-export const MODE_TRAIN = `train`;
+export const DEFAULT_ROUTE = `main/train`;

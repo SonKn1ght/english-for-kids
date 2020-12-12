@@ -1,8 +1,5 @@
 import AbstractView from './absctract-view';
-import {
-  MODE_TRAIN,
-  MODE_GAME,
-} from "../const";
+import { Mode } from "../const";
 
 const MENU_VISIBILITY: string = `menu--active`;
 const MENU: string = `menu`;
@@ -11,10 +8,10 @@ const MENU_LINK_ACTIVE: string = `menu__link-active`;
 
 const switchLinkMode = (link: HTMLElement): void => {
   const currentLink = link.getAttribute(`href`);
-  if (currentLink.includes(MODE_GAME)) {
-    link.setAttribute(`href`, currentLink.replace(MODE_GAME, MODE_TRAIN));
+  if (currentLink.includes(Mode.GAME)) {
+    link.setAttribute(`href`, currentLink.replace(Mode.GAME, Mode.TRAIN));
   } else {
-    link.setAttribute(`href`, currentLink.replace(MODE_TRAIN, MODE_GAME));
+    link.setAttribute(`href`, currentLink.replace(Mode.TRAIN, Mode.GAME));
   }
 };
 
@@ -69,7 +66,7 @@ export class ControlView extends AbstractView {
                     <input
                       class="visually-hidden indicatorModeJs"
                       type="checkbox"
-                      ${this.mode === MODE_GAME ? `checked` : ``}
+                      ${this.mode === Mode.GAME ? `checked` : ``}
                       >
                     <span class="toggle-indicator"></span>
                   </label>
@@ -152,7 +149,7 @@ export class ControlView extends AbstractView {
 
   private updateStateIndicatorMode(): void {
     const target = this.indicatorMode as HTMLInputElement;
-    if (this.mode === MODE_GAME) {
+    if (this.mode === Mode.GAME) {
       target.checked = true;
       return;
     }
