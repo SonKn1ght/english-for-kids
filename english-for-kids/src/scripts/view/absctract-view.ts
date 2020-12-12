@@ -5,8 +5,6 @@ export default abstract class AbstractView {
 
   public callback: {[key: string]: (evt: MouseEvent | KeyboardEvent) => void};
 
-  // constructor() {}
-
   getTemplate(): string {
     return ``;
   }
